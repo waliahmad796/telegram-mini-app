@@ -1,13 +1,13 @@
 window.addEventListener("DOMContentLoaded", () => {
-  // Check if running inside Telegram WebApp
+  const tgCheck = document.getElementById("tg-check");
   if (window.Telegram && window.Telegram.WebApp) {
+    if (tgCheck) tgCheck.textContent = "In Telegram";
     const tg = window.Telegram.WebApp;
     tg.expand();
 
     // Get user info
     const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
     if (user) {
-      // Prefer display name, fallback to username or first name
       const name =
         (user.first_name ? user.first_name : "") +
           (user.last_name ? " " + user.last_name : "") ||
@@ -27,6 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
   } else {
+    if (tgCheck) tgCheck.textContent = "Not in Telegram";
     const usernameSpan = document.getElementById("tg-username");
     if (usernameSpan) usernameSpan.textContent = "Not in Telegram";
     const mainButton = document.getElementById("mainButton");

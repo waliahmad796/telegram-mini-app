@@ -2,6 +2,9 @@
 let tg = null;
 let user = null;
 
+// Development mode - simulate Telegram environment for testing
+const isDevelopment = !window.Telegram || !window.Telegram.WebApp;
+
 // Initialize the Telegram Mini App
 function initTelegramApp() {
   // Check if we're in Telegram
@@ -35,18 +38,123 @@ function initTelegramApp() {
     // Initialize app state
     initializeAppState();
   } else {
-    // Not running in Telegram
+    // Not running in Telegram - Development mode
     const tgCheck = document.getElementById("tg-check");
     if (tgCheck) {
-      tgCheck.textContent = "❌ Not running in Telegram";
-      tgCheck.style.color = "#ff0000";
+      tgCheck.textContent = "🛠️ Development Mode - Not in Telegram";
+      tgCheck.style.color = "#ffa500";
     }
 
     const usernameSpan = document.getElementById("tg-username");
     if (usernameSpan) {
-      usernameSpan.textContent = "Demo Mode";
+      usernameSpan.textContent = "Demo User";
     }
+
+    // Create mock Telegram object for development
+    createMockTelegram();
   }
+}
+
+// Create mock Telegram object for development testing
+function createMockTelegram() {
+  tg = {
+    ready: () => console.log("Mock: App ready"),
+    expand: () => console.log("Mock: App expanded"),
+    initDataUnsafe: {
+      user: {
+        id: 123456789,
+        first_name: "Demo",
+        last_name: "User",
+        username: "demo_user",
+        language_code: "en",
+      },
+    },
+    themeParams: {
+      bg_color: "#ffffff",
+      text_color: "#000000",
+      hint_color: "#999999",
+      link_color: "#2481cc",
+      button_color: "#2481cc",
+      button_text_color: "#ffffff",
+      secondary_bg_color: "#f1f1f1",
+    },
+    colorScheme: "light",
+    viewportHeight: 600,
+    MainButton: {
+      text: "🎁 Claim Daily Reward",
+      isVisible: false,
+      setText: (text) => {
+        tg.MainButton.text = text;
+        console.log("Mock: Main button text set to", text);
+      },
+      show: () => {
+        tg.MainButton.isVisible = true;
+        console.log("Mock: Main button shown");
+      },
+      hide: () => {
+        tg.MainButton.isVisible = false;
+        console.log("Mock: Main button hidden");
+      },
+      onClick: (callback) => {
+        tg.MainButton.onClickCallback = callback;
+      },
+      showProgress: () => console.log("Mock: Main button showing progress"),
+      hideProgress: () => console.log("Mock: Main button hiding progress"),
+    },
+    BackButton: {
+      onClick: (callback) => console.log("Mock: Back button callback set"),
+    },
+    HapticFeedback: {
+      impactOccurred: (style) => console.log("Mock: Haptic feedback", style),
+      notificationOccurred: (type) => console.log("Mock: Notification", type),
+    },
+    CloudStorage: {
+      setItem: (key, value, callback) => {
+        console.log("Mock: Cloud storage set", key, value);
+        if (callback) callback(null, true);
+      },
+      getItem: (key, callback) => {
+        console.log("Mock: Cloud storage get", key);
+        if (callback) callback(null, null);
+      },
+    },
+    showAlert: (message) => {
+      alert("Mock Telegram Alert: " + message);
+    },
+    showConfirm: (message, callback) => {
+      const result = confirm("Mock Telegram Confirm: " + message);
+      if (callback) callback(result);
+    },
+    openLink: (url) => {
+      console.log("Mock: Opening link", url);
+      window.open(url, "_blank");
+    },
+    onEvent: (eventType, callback) => {
+      console.log("Mock: Event listener set for", eventType);
+    },
+  };
+
+  // Set up mock user
+  user = tg.initDataUnsafe.user;
+  updateUserInfo();
+  setupTheme();
+  setupMainButton();
+  setupEventListeners();
+  initializeAppState();
+
+  // Show development notice
+  const devNotice = document.getElementById("dev-notice");
+  if (devNotice) {
+    devNotice.style.display = "block";
+  }
+
+  console.log("🛠️ Development mode enabled - Mock Telegram object created");
+  console.log(
+    "📱 To test in real Telegram, deploy this app and open it from your bot"
+  );
+  console.log(
+    "🔧 All Telegram API calls are being mocked - check console for details"
+  );
 }
 
 // Update user information display

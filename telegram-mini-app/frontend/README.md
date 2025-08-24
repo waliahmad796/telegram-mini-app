@@ -197,3 +197,40 @@ For Telegram Mini App development:
 ## License
 
 This project is open source and available under the MIT License.
+
+<!-- THE FRONTEND CODE BEFORE DEPLOYING TO VERCEL -->
+
+// {
+// "version": 2,
+// "builds": [
+// {
+// "src": "*.html",
+// "use": "@vercel/static"
+// }
+// ],
+// "routes": [
+// {
+// "src": "/(.*)",
+// "dest": "/$1"
+// }
+// ],
+// "headers": [
+// {
+// "source": "/(.\*)",
+// "headers": [
+// {
+// "key": "X-Frame-Options",
+// "value": "SAMEORIGIN"
+// },
+// {
+// "key": "X-Content-Type-Options",
+// "value": "nosniff"
+// },
+// {
+// "key": "Referrer-Policy",
+// "value": "strict-origin-when-cross-origin"
+// }
+// ]
+// }
+// ]
+// }

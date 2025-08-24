@@ -1,3 +1,38 @@
+// {
+//   "version": 2,
+//   "builds": [
+//     {
+//       "src": "*.html",
+//       "use": "@vercel/static"
+//     }
+//   ],
+//   "routes": [
+//     {
+//       "src": "/(.*)",
+//       "dest": "/$1"
+//     }
+//   ],
+//   "headers": [
+//     {
+//       "source": "/(.*)",
+//       "headers": [
+//         {
+//           "key": "X-Frame-Options",
+//           "value": "SAMEORIGIN"
+//         },
+//         {
+//           "key": "X-Content-Type-Options",
+//           "value": "nosniff"
+//         },
+//         {
+//           "key": "Referrer-Policy",
+//           "value": "strict-origin-when-cross-origin"
+//         }
+//       ]
+//     }
+//   ]
+// }
+
 {
   "version": 2,
   "builds": [
@@ -6,10 +41,10 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ],
   "headers": [

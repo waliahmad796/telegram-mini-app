@@ -1,50 +1,9 @@
-// {
-//   "version": 2,
-//   "builds": [
-//     {
-//       "src": "*.html",
-//       "use": "@vercel/static"
-//     }
-//   ],
-//   "routes": [
-//     {
-//       "src": "/(.*)",
-//       "dest": "/$1"
-//     }
-//   ],
-//   "headers": [
-//     {
-//       "source": "/(.*)",
-//       "headers": [
-//         {
-//           "key": "X-Frame-Options",
-//           "value": "SAMEORIGIN"
-//         },
-//         {
-//           "key": "X-Content-Type-Options",
-//           "value": "nosniff"
-//         },
-//         {
-//           "key": "Referrer-Policy",
-//           "value": "strict-origin-when-cross-origin"
-//         }
-//       ]
-//     }
-//   ]
-// }
-
 {
   "version": 2,
   "builds": [
     {
-      "src": "*.html",
+      "src": "index.html",
       "use": "@vercel/static"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
     }
   ],
   "headers": [
@@ -64,6 +23,12 @@
           "value": "strict-origin-when-cross-origin"
         }
       ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ]
 }

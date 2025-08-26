@@ -64,7 +64,7 @@ class ApiService {
       }),
     });
   }
-
+  // ADD COMPLETE API
   async completeAd(adId, userId, watchTime = 30) {
     return this.request("/ads/complete", {
       method: "POST",
@@ -92,13 +92,13 @@ class ApiService {
   async getBalance(telegramId) {
     return this.request(`/balance/${telegramId}`);
   }
-
-  async claimDailyReward(telegramId) {
-    return this.request("/balance/daily-reward", {
-      method: "POST",
-      body: JSON.stringify({ telegramId }),
-    });
-  }
+  // DAILY REWARD NOT NEEDED FOR THIS VERSION
+  // async claimDailyReward(telegramId) {
+  //   return this.request("/balance/daily-reward", {
+  //     method: "POST",
+  //     body: JSON.stringify({ telegramId }),
+  //   });
+  // }
 
   async getTransactions(telegramId, page = 1, limit = 20, type = null) {
     const params = new URLSearchParams({

@@ -38,7 +38,7 @@ async function initTelegramApp() {
     setupTheme();
 
     // Set up main button
-    setupMainButton();
+    // setupMainButton();
 
     // Set up event listeners
     setupEventListeners();
@@ -232,16 +232,16 @@ function setupTheme() {
 }
 
 // Set up main button
-function setupMainButton() {
-  if (!tg) return;
+// function setupMainButton() {
+//   if (!tg) return;
 
-  const mainButton = tg.MainButton;
-  mainButton.setText("🎁 Claim Daily Reward");
-  mainButton.show();
-  mainButton.onClick(() => {
-    claimDailyReward();
-  });
-}
+//   const mainButton = tg.MainButton;
+//   mainButton.setText("🎁 Claim Daily Reward");
+//   mainButton.show();
+//   mainButton.onClick(() => {
+//     claimDailyReward();
+//   });
+// }
 
 // Set up event listeners
 function setupEventListeners() {
@@ -309,152 +309,44 @@ async function initializeAppState() {
 }
 
 // Claim daily reward
-async function claimDailyReward() {
-  if (!tg || !user) return;
-
-  try {
-    // Show loading state
-    tg.MainButton.showProgress();
-    tg.HapticFeedback.impactOccurred("medium");
-
-    // Call backend API
-    const response = await api.claimDailyReward(user.id.toString());
-
-    // Hide loading state
-    tg.MainButton.hideProgress();
-
-    // Show success message
-    const rewardAmount = response.reward.amount.toFixed(6);
-    tg.showAlert(`🎉 Daily reward claimed! +${rewardAmount} USD`);
-    tg.HapticFeedback.notificationOccurred("success");
-
-    // Update UI with new balance
-    window.currentBalance = response.balance;
-    updateBalance();
-
-    // Save progress
-    saveProgress();
-  } catch (error) {
-    // Hide loading state
-    tg.MainButton.hideProgress();
-
-    // Show error message
-    const errorMessage = error.message || "Failed to claim daily reward";
-    tg.showAlert(`❌ ${errorMessage}`);
-    tg.HapticFeedback.notificationOccurred("error");
-
-    console.error("Failed to claim daily reward:", error);
-  }
-}
-
-// Watch ad function
-// async function watchAd(methodNumber) {
+// async function claimDailyReward() {
 //   if (!tg || !user) return;
 
-//   const button = document.querySelector(
-//     `.card:nth-child(${methodNumber + 2}) .btn-watch`
-//   );
-//   const progressBar = document.querySelector(
-//     `.card:nth-child(${methodNumber + 2}) .progress-bar-fill`
-//   );
-//   const progressLabel = document.querySelector(
-//     `.card:nth-child(${methodNumber + 2}) .progress-label`
-//   );
-//   console.log(
-//     "watchAd called for method",
-//     button && progressBar && progressLabel
-//   );
+//   try {
+//     // Show loading state
+//     tg.MainButton.showProgress();
+//     tg.HapticFeedback.impactOccurred("medium");
 
-//   if (button && progressBar && progressLabel) {
-//     try {
-//       // Disable button
-//       button.disabled = true;
-//       button.textContent = "Loading...";
+//     // Call backend API
+//     const response = await api.claimDailyReward(user.id.toString());
 
-//       // Show haptic feedback
-//       tg.HapticFeedback.impactOccurred("light");
+//     // Hide loading state
+//     tg.MainButton.hideProgress();
 
-//       // Get available ads
-//       const availableAds = await api.getAvailableAds(user.id.toString());
-//       console.log("Available ads:", availableAds);
+//     // Show success message
+//     const rewardAmount = response.reward.amount.toFixed(6);
+//     tg.showAlert(`🎉 Daily reward claimed! +${rewardAmount} USD`);
+//     tg.HapticFeedback.notificationOccurred("success");
 
-//       if (!availableAds.ads || availableAds.ads.length === 0) {
-//         throw new Error("No ads available at the moment");
-//       }
+//     // Update UI with new balance
+//     window.currentBalance = response.balance;
+//     updateBalance();
 
-//       // Select first available ad
-//       const selectedAd = availableAds.ads[0];
-//       console.log("Selected ad:", selectedAd);
+//     // Save progress
+//     saveProgress();
+//   } catch (error) {
+//     // Hide loading state
+//     tg.MainButton.hideProgress();
 
-//       // Start ad in backend
-//       const startResponse = await api.startAd(
-//         user.id.toString(),
-//         selectedAd.type,
-//         selectedAd.id
-//       );
-//       console.log("Ad started:", startResponse);
+//     // Show error message
+//     const errorMessage = error.message || "Failed to claim daily reward";
+//     tg.showAlert(`❌ ${errorMessage}`);
+//     tg.HapticFeedback.notificationOccurred("error");
 
-//       // Update button text
-//       button.textContent = `Watching (${selectedAd.duration}s)...`;
-
-//       // Simulate ad watching with actual duration
-//       setTimeout(async () => {
-//         try {
-//           // Complete ad in backend
-//           const completeResponse = await api.completeAd(
-//             startResponse.ad.id,
-//             user.id.toString(),
-//             selectedAd.duration
-//           );
-//           console.log("Ad completed:", completeResponse);
-
-//           // Update progress
-//           const currentProgress =
-//             parseInt(progressLabel.textContent.split("/")[0]) + 1;
-//           const totalProgress = 105;
-//           const percentage = (currentProgress / totalProgress) * 100;
-
-//           progressBar.style.width = `${percentage}%`;
-//           progressLabel.textContent = `${currentProgress}/${totalProgress}`;
-
-//           // Re-enable button
-//           button.disabled = false;
-//           button.textContent = "Watch Ad";
-
-//           // Show success feedback
-//           tg.HapticFeedback.notificationOccurred("success");
-//           const earnings = completeResponse.earnings.toFixed(6);
-//           tg.showAlert(`✅ Ad watched! +${earnings} USD earned!`);
-
-//           // Update balance
-//           window.currentBalance = completeResponse.userBalance;
-//           updateBalance();
-
-//           // Check if completed
-//           if (currentProgress >= totalProgress) {
-//             tg.showAlert("🎉 Method completed! +0.002000 USD");
-//             updateBalance(0.002);
-//           }
-
-//           // Save progress
-//           saveProgress();
-//         } catch (error) {
-//           console.error("Failed to complete ad:", error);
-//           button.disabled = false;
-//           button.textContent = "Watch Ad";
-//           const errorMessage = error.message || "Failed to complete ad";
-//           tg.showAlert(`❌ ${errorMessage}`);
-//         }
-//       }, selectedAd.duration * 1000); // Use actual ad duration
-//     } catch (error) {
-//       console.error("Failed to start ad:", error);
-//       button.disabled = false;
-//       button.textContent = "Watch Ad";
-//       const errorMessage = error.message || "Failed to start ad";
-//       tg.showAlert(`❌ ${errorMessage}`);
-//     }
+//     console.error("Failed to claim daily reward:", error);
 //   }
 // }
+// WATCH ADD FUNCTION
 async function watchAd(methodNumber) {
   if (!tg || !user) return;
   // Get all watch ads cards (Method 1, 2, 3)
@@ -557,21 +449,6 @@ async function watchAd(methodNumber) {
     tg.showAlert(`❌ ${error.message || "Failed to start ad"}`);
   }
 }
-
-// Update balance display
-// function updateBalance(amount) {
-//   const balanceElements = document.querySelectorAll(".balance-amount");
-//   const currentBalance = window.currentBalance || 0;
-
-//   balanceElements.forEach((element) => {
-//     if (amount) {
-//       const newBalance = currentBalance + amount;
-//       element.textContent = newBalance.toFixed(6);
-//     } else {
-//       element.textContent = currentBalance.toFixed(6);
-//     }
-//   });
-// }
 
 // Update balance display in all places where `.balance-amount` is used
 function updateBalance(amount = 0) {
